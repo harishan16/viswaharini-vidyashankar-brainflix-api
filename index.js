@@ -5,6 +5,7 @@ import videos from './routes/videos.js'
 const app = express();
 app.use(cors());
 
+app.use('/images', express.static('./public/images'))
 
 const PORT = 8080;
 
