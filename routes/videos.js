@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
         title: req.body.title,
         description: req.body.description,
         channel: 'Olivia Davis',
-        image: 'http://localhost:8080/images/Upload-video-preview.jpg', 
+        image: req.body.image, 
         views: '0',
         likes: '0',
         duration: '24:50',
