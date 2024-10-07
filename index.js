@@ -17,7 +17,6 @@ app.get('/', function(req, res) {
 app.use(express.json())
 
 app.use((req, res, next) => {
-    console.log('middleware');
     next();
 })
 
