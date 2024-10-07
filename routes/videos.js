@@ -2,27 +2,7 @@ import fs from 'fs';
 import express from 'express'
 import crypto from "crypto";
 
-
 const router = express.Router();
-
-const channelNames = ['Cornelia Currey', 'Dalia Bennu', 'Emmett Wilson', 'Album Art Exchange', 'Record Room', 'Discography Deep Dive' ];
-
-const imagesArray = ['http://localhost:8080/images/image0.jpg', 
-    'http://localhost:8080/images/image1.jpg', 
-    'http://localhost:8080/images/image2.jpg', 
-    'http://localhost:8080/images/image3.jpg', 
-    'http://localhost:8080/images/image4.jpg', 
-    'http://localhost:8080/images/image5.jpg', 
-    'http://localhost:8080/images/image6.jpg', 
-    'http://localhost:8080/images/image7.jpg', 
-    'http://localhost:8080/images/image8.jpg'];
-
-
-const durationArray = ['32:12', "14:45", '12:30', '22:50', '40:10', '25:40'];
-
-const commentersArray = ['Olivia Davis', 'Ethan Garcia', 'Ava Wilson', 'Mia Robinson', 'Isabella Taylor'];
-
-const commentDates = [1693526400000, 1696099199000, 1696924800000, 1698796800000, 1699957800000];
 
 const getVideos = () => {
     const data = fs.readFileSync('./data/videos.json');
@@ -35,7 +15,12 @@ router.get('/', (req, res) => {
     if(!videos.length) {
         res.status(404).send('The request does not exists')
     }
-    res.status(200).json(videos);
+
+    const subsetVideos = videos.map((video) => {
+        return { id: video.id, image: video.image, title: video.title, channel: video.channel };
+      });
+
+    res.status(200).json(subsetVideos);
 })
 
 router.get('/:id', (req, res) => {
@@ -50,24 +35,22 @@ router.get('/:id', (req, res) => {
     }
 })
 
-const getRandomItem = (array) => {
-    const randomIndex = Math.floor(Math.random() * array.length);
-    return array[randomIndex];
-}
-
 router.post('/', (req, res) => {
+
+    if (!req.body.title || !req.body.description) {
+        return res.status(400).send('Invalid input');
+    }
 
     const videoInfo = {
         id: crypto.randomUUID(),
         title: req.body.title,
         description: req.body.description,
-        channel: getRandomItem(channelNames),
-        // create one athlete image here
-        image: getRandomItem(imagesArray),
+        channel: 'Olivia Davis',
+        image: 'http://localhost:8080/images/Upload-video-preview.jpg', 
         views: '0',
         likes: '0',
-        duration: getRandomItem(durationArray),
-        video: "nil",
+        duration: '24:50',
+        video: '',
         timestamp: new Date()
     }
 
